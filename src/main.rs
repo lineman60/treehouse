@@ -27,19 +27,31 @@ fn what_is_your_name() -> String {
 }
 
 fn main() {
+
+    let mut visitor_list = vec![
+        Visitor::new("foo", "The beer is in the fridge"),
+        Visitor::new("bar", "Remember to tip the waitstaff"),
+        Visitor::new("biz", "who invited you?"),
+    ];
+
     loop {
         println!("Hello, what's your name? (Leave empty to exit)");
         let name = what_is_your_name();
-        let mut visitor_list = vec![
-            Visitor::new("foo", "The beer is in the fridge"),
-            Visitor::new("bar", "Remember to tip the waitstaff"),
-            Visitor::new("biz", "who invited you?"),
-        ];
         let known_visitor = visitor_list.iter().find(|visitor| visitor.name == name);
         match known_visitor {
             Some(visitor) => visitor.greet_visitor(),
-            None => println!("I don't know you, Get lost"),
+            None => {
+                if name.is_empty(){
+                    break;
+                }else {
+                    println!("{} is not on the visitor list", name);
+                    visitor_list.push(Visitor::new(&name, "new friend"));
+                }
+            }
+
         }
-    break;
+
     }
+    println!("Final list of visitors");
+    println!("{:#?}", visitor_list);
 }
